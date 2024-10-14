@@ -2,9 +2,10 @@ import { connect } from "cloudflare:sockets";
 import { prisma } from "../utils/db";
 
 interface Post {
-  title: string;
-  content: string;
-  authorId: string;
+  id?:string,
+  title: string,
+  content: string,
+  authorId: string
 }
 
 interface response {
@@ -67,6 +68,44 @@ export const getPost = async (id: string) => {
       let response = {
         post: post,
         message: "Post fetched succesfully ",
+        status: true,
+      };
+      return response;
+    }
+  } catch (err) {
+    console.error(err);
+    let response = {
+      message: "internal server error , try again later",
+      status: false,
+    };
+    return response;
+  }
+};
+
+
+export const updatePost = async ({id,title,content,authorId}:Post) => {
+  try {
+    const updatedPost = await prisma.post.update({
+      where:{
+        id,
+        authorId
+
+      },
+      data:{
+        title,
+        content
+      }
+    })
+
+    if (!updatedPost) {
+      let response = {
+        message: "Post is not updated",
+        status: false,
+      };
+      return response;
+    } else {
+      let response = {
+        message: "Post Updated succesfully ",
         status: true,
       };
       return response;

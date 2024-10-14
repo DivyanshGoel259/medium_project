@@ -54,3 +54,22 @@ export const getPost = async (c: Context) => {
     });
   }
 };
+
+export const updatePost = async (c: Context) => {
+  const authorId = c.get("userid");
+  const {id,title,content} = await c.req.json()
+  try {
+    const response = await service.updatePost({id,title,content,authorId});
+    if (response.status) {
+      return c.json({ response }, 200);
+    } else {
+      return c.json({ response }, 400);
+    }
+  } catch (err) {
+    console.error(err);
+    return c.json({
+      message: "Can't Update Post , try again later",
+      status: false,
+    });
+  }
+};
