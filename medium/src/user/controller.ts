@@ -28,9 +28,9 @@ export const Signin = async (c: Context) => {
   try {
     const response = await service.Signin({ email, password });
     if (response.status) {
-      c.json({ response }, 200);
+      return c.json({ response }, 200);
     } else {
-      c.json({ response }, 403);
+      return c.json({ response }, 403);
     }
   } catch (err) {
     return c.json({ Message: "Signin Failed , Try Again later" });
