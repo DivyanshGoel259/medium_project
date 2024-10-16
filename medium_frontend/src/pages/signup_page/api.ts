@@ -6,7 +6,7 @@ import { SignupType } from "./types";
 export const signupReq = async ({ name, email, password }: SignupType) => {
   try {
     const data = await post(`${baseUrl}/user/signup`, { name, email, password });
-    localStorage.setItem("token",data.token)    
+    localStorage.setItem("token", data.token)
     return [data, null];
   } catch (err) {
     return [null, err];

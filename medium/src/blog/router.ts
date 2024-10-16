@@ -7,7 +7,7 @@ const bookRouter = new Hono();
 bookRouter.use(initMiddleware);
 bookRouter.post("/", controller.Post);
 bookRouter.put("/",controller.updatePost)
+bookRouter.get("/posts", controller.getAllPosts);
 bookRouter.get("/:id", controller.getPost);
-bookRouter.get("/bulk", controller.getPosts);
 
 export default bookRouter;

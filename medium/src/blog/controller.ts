@@ -55,23 +55,7 @@ export const getPost = async (c: Context) => {
   }
 };
 
-export const getPosts = async (c: Context) => {
-  console.log("reached")
-  try {
-    const response = await service.getPosts();
-    if (response.status) {
-      return c.json({ response }, 200);
-    } else {
-      return c.json({ response }, 400);
-    }
-  } catch (err) {
-    console.error(err);
-    return c.json({
-      message: "Can't Fetch Posts , try again later",
-      status: false,
-    });
-  }
-};
+
 
 export const updatePost = async (c: Context) => {
   const authorId = c.get("userid");
@@ -87,6 +71,24 @@ export const updatePost = async (c: Context) => {
     console.error(err);
     return c.json({
       message: "Can't Update Post , try again later",
+      status: false,
+    });
+  }
+};
+
+
+export const getAllPosts = async (c: Context) => {
+  try {
+    const response = await service.getAllPosts();
+    if (response.status) {
+      return c.json({ response }, 200);
+    } else {
+      return c.json({ response }, 400);
+    }
+  } catch (err) {
+    console.error(err);
+    return c.json({
+      message: "Can't Fetch Posts , try again later",
       status: false,
     });
   }

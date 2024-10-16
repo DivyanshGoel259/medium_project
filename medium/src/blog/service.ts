@@ -49,33 +49,6 @@ export const Post = async ({ title, content, authorId }: Post) => {
   }
 };
 
-export const getPosts = async () => {
-  try {
-    const post = await prisma.post.findMany({})
-
-    if (!post) {
-      let response = {
-        message: "Posts Doesn't Exist",
-        status: false,
-      };
-      return response;
-    } else {
-      let response = {
-        post: post,
-        message: "Posts fetched succesfully ",
-        status: true,
-      };
-      return response;
-    }
-  } catch (err) {
-    console.error(err);
-    let response = {
-      message: "internal server error , try again later",
-      status: false,
-    };
-    return response;
-  }
-};
 
 export const getPost = async (id: string) => {
   try {
@@ -84,7 +57,6 @@ export const getPost = async (id: string) => {
         id,
       },
     });
-
     if (!post) {
       let response = {
         message: "Post Doesn't Exist",
@@ -133,6 +105,47 @@ export const updatePost = async ({id,title,content,authorId}:Post) => {
     } else {
       let response = {
         message: "Post Updated succesfully ",
+        status: true,
+      };
+      return response;
+    }
+  } catch (err) {
+    console.error(err);
+    let response = {
+      message: "internal server error , try again later",
+      status: false,
+    };
+    return response;
+  }
+};
+
+
+
+export const getAllPosts = async () => {
+  try {
+    const post = await prisma.post.findMany({
+      select:{
+        id: true,
+        title: true,
+        content: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      }
+    })
+    if (!post) {
+      let response = {
+        message: "Posts Doesn't Exist",
+        status: false,
+      };
+      return response;
+    } else {
+      let response = {
+        post: post,
+        message: "Posts fetched succesfully ",
         status: true,
       };
       return response;

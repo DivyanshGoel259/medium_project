@@ -13,6 +13,6 @@ const app = new Hono<{
 // app.basePath("/");
 app.use(cors())
 app.route("/api/v1/user", userRouter);
-app.route("/api/v1/blog", bookRouter);
+app.route("/api/v1/blogs", bookRouter);
 
 export default app;

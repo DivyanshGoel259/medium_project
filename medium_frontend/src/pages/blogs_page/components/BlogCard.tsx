@@ -1,3 +1,6 @@
+import { Avatar } from "../../../components/Avatar";
+
+
 interface blogCard {
     authorName: string;
     title: string;
@@ -12,18 +15,18 @@ export const BlogCard = ({
     publishedDate,
 }: blogCard) => {
     return (
-        <div className="w-full shadow-md font-poppins flex justify-center flex-col">
+        <div className="w-screen max-w-screen-md shadow-md font-poppins flex justify-center flex-col">
             <div className="p-4">
-                <div className="flex gap-3 items-center">
+                <div className="mt-4 flex gap-3 items-center">
                     <div>
-                        <Avatar authorName={authorName}/>
+                        <Avatar authorName={authorName} size="big" />
                     </div>
                     <div className="items-center">{authorName}</div>
                     <div className="items-center text-xs text-gray-500">&#9679;</div>
                     <div className="text-gray-500 items-center">{publishedDate}</div>
                 </div>
-                <div>
-                    <div className="mt-2 text-xl font-bold max-w-lg">{title}</div>
+                <div className="mt-4">
+                    <div className=" text-xl font-bold max-w-lg">{title}</div>
                     <div className="mt-2 text-md max-w-lg">
                         {content.slice(0, 178) + "..."}
                     </div>
@@ -66,9 +69,3 @@ export const BlogCard = ({
 };
 
 
-const Avatar = ({ authorName }:{authorName: string})=> {
-    return <div className="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-        <span className="font-medium text-gray-600 dark:text-gray-300">{authorName[0]}</span>
-    </div>
-
-}
