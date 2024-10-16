@@ -8,5 +8,6 @@ bookRouter.use(initMiddleware);
 bookRouter.post("/", controller.Post);
 bookRouter.put("/",controller.updatePost)
 bookRouter.get("/:id", controller.getPost);
+bookRouter.get("/bulk", controller.getPosts);
 
 export default bookRouter;

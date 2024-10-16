@@ -1,4 +1,3 @@
-import { connect } from "cloudflare:sockets";
 import { prisma } from "../utils/db";
 
 interface Post {
@@ -37,6 +36,34 @@ export const Post = async ({ title, content, authorId }: Post) => {
       let response: response = {
         message: "Failed to create post",
         status: false,
+      };
+      return response;
+    }
+  } catch (err) {
+    console.error(err);
+    let response = {
+      message: "internal server error , try again later",
+      status: false,
+    };
+    return response;
+  }
+};
+
+export const getPosts = async () => {
+  try {
+    const post = await prisma.post.findMany({})
+
+    if (!post) {
+      let response = {
+        message: "Posts Doesn't Exist",
+        status: false,
+      };
+      return response;
+    } else {
+      let response = {
+        post: post,
+        message: "Posts fetched succesfully ",
+        status: true,
       };
       return response;
     }
