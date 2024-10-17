@@ -7,7 +7,7 @@ interface button{
 export const Button = ({title,onClick}:button)=>{
 
     return <div className="font-poppins">
-        <button className="py-2 rounded-[8px] w-full bg-[#18181a] text-white" onClick={onClick}>{title}</button>
+        <button className="py-2 px-4 rounded-full w-full bg-slate-800 text-white" onClick={onClick}>{title}</button>
     </div>
 
 }

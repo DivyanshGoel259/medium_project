@@ -1,7 +1,7 @@
 import { prisma } from "../utils/db";
 
 interface Post {
-  id?:string,
+  id?: string,
   title: string,
   content: string,
   authorId: string
@@ -56,6 +56,16 @@ export const getPost = async (id: string) => {
       where: {
         id,
       },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        author: {
+          select: {
+            name: true
+          }
+        },
+      }
     });
     if (!post) {
       let response = {
@@ -82,15 +92,15 @@ export const getPost = async (id: string) => {
 };
 
 
-export const updatePost = async ({id,title,content,authorId}:Post) => {
+export const updatePost = async ({ id, title, content, authorId }: Post) => {
   try {
     const updatedPost = await prisma.post.update({
-      where:{
+      where: {
         id,
         authorId
 
       },
-      data:{
+      data: {
         title,
         content
       }
@@ -124,7 +134,7 @@ export const updatePost = async ({id,title,content,authorId}:Post) => {
 export const getAllPosts = async () => {
   try {
     const post = await prisma.post.findMany({
-      select:{
+      select: {
         id: true,
         title: true,
         content: true,
