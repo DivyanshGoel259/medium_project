@@ -4,6 +4,8 @@ import { fetchBlog } from "./api"
 import { Post } from "./components/Post"
 import { AppBar } from "../../components/AppBar"
 import { Author } from "./components/Author"
+import { PostLoadingUi } from "./components/PostLoadingUi"
+import { AuthorLoadingUI } from "./components/AuthorLoadingUi"
 
 export const Blog = () => {
     let { postId } = useParams()
@@ -18,15 +20,13 @@ export const Blog = () => {
                 setError(err.message)
                 setLoading(false)
                 return
-            }
-            setPost(data.post)
+            } 
+            setPost(data)
             setLoading(false)
         })
     }, [])
 
-    if (isLoading) {
-        return <h1>Loading...</h1>
-    }
+    
     if (error) {
         return <h1>Error: {error}</h1>
     }
@@ -36,11 +36,11 @@ export const Blog = () => {
         </div>
 
         <div className="p-6 grid grid-cols-10 mt-6">
-            <div className="col-span-6 flex justify-center flex-col items-center ">
-                <Post post={post} />
+            <div className="col-span-6 flex justify-center flex-col items-center">
+                {isLoading?<PostLoadingUi></PostLoadingUi>:<Post post={post} />}
             </div>
             <div className="col-span-4">
-                <Author post={post} Description="Master of Mirth ,purveyor of puns,and the funniest person in the kingdom" />
+                {isLoading?<AuthorLoadingUI></AuthorLoadingUI>:<Author post={post} Description="Master of Mirth ,purveyor of puns,and the funniest person in the kingdom" />}
             </div>
         </div>
 

@@ -1,5 +1,5 @@
 import { Avatar } from "../../../components/Avatar"
-import { Post } from "./Post"
+import { Post } from "../../../types"
 
 export const Author = ({post,Description}:{post:Post,Description:string})=>{
     return <div className="font-poppins ">

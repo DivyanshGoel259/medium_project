@@ -7,12 +7,8 @@ interface Post {
   authorId: string
 }
 
-interface response {
-  post?: JSON;
-  message: string;
-  status: boolean;
-}
-export const Post = async ({ title, content, authorId }: Post) => {
+
+export const post = async ({ title, content, authorId }: Post) => {
   try {
     const post = await prisma.post.create({
       data: {
@@ -26,28 +22,11 @@ export const Post = async ({ title, content, authorId }: Post) => {
         },
       },
     });
-    if (post.id) {
-      let response: response = {
-        message: "Post created successfully",
-        status: true,
-      };
-      return response;
-    } else {
-      let response: response = {
-        message: "Failed to create post",
-        status: false,
-      };
-      return response;
-    }
-  } catch (err) {
-    console.error(err);
-    let response = {
-      message: "internal server error , try again later",
-      status: false,
-    };
-    return response;
-  }
+    return post
+  } catch (err:any) {
+    throw new Error(err.message || "An error occurred while creating the post");
 };
+}
 
 
 export const getPost = async (id: string) => {
@@ -68,26 +47,11 @@ export const getPost = async (id: string) => {
       }
     });
     if (!post) {
-      let response = {
-        message: "Post Doesn't Exist",
-        status: false,
-      };
-      return response;
-    } else {
-      let response = {
-        post: post,
-        message: "Post fetched succesfully ",
-        status: true,
-      };
-      return response;
+      throw new Error("Post not found");
     }
-  } catch (err) {
-    console.error(err);
-    let response = {
-      message: "internal server error , try again later",
-      status: false,
-    };
-    return response;
+    return post
+  } catch (err:any) {
+    throw new Error(err.message || "An error occurred while creating the post");
   }
 };
 
@@ -107,25 +71,11 @@ export const updatePost = async ({ id, title, content, authorId }: Post) => {
     })
 
     if (!updatedPost) {
-      let response = {
-        message: "Post is not updated",
-        status: false,
-      };
-      return response;
-    } else {
-      let response = {
-        message: "Post Updated succesfully ",
-        status: true,
-      };
-      return response;
+      throw new Error("Post can not be updated successfully");
     }
-  } catch (err) {
-    console.error(err);
-    let response = {
-      message: "internal server error , try again later",
-      status: false,
-    };
-    return response;
+    return updatedPost
+  } catch (err:any) {
+    throw new Error(err.message || "An error occurred while creating the post");
   }
 };
 
@@ -146,26 +96,9 @@ export const getAllPosts = async () => {
         },
       }
     })
-    if (!post) {
-      let response = {
-        message: "Posts Doesn't Exist",
-        status: false,
-      };
-      return response;
-    } else {
-      let response = {
-        post: post,
-        message: "Posts fetched succesfully ",
-        status: true,
-      };
-      return response;
-    }
-  } catch (err) {
-    console.error(err);
-    let response = {
-      message: "internal server error , try again later",
-      status: false,
-    };
-    return response;
-  }
+    return post
+  } catch (err:any) {
+    const errorMessage = err.message|| "An error occurred while getting the posts"
+    throw new Error(errorMessage);
+}
 };

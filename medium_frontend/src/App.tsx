@@ -8,8 +8,10 @@ import { CreateBlog } from './pages/create_blog_page/CreateBlogPage'
 
 function App() {
 
+
   return (
     <>
+    
       <BrowserRouter>
         <Routes>
           <Route path='/signup' element={<SignupPage />} />

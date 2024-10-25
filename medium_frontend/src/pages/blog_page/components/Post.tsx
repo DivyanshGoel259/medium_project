@@ -1,15 +1,7 @@
-
-import { Author } from "../api"
-
-export interface Post {
-    title: string,
-    content: string,
-    id: string,
-    author: Author
-}
+import { Post as post } from "../../../types"
 
 
-export const Post = ({ post }: { post: Post }) => {
+export const Post = ({ post }: { post: post }) => {
     return <div className="font-poppins flex justify-center flex-col">
             <div className="flex justify-center max-w-screen-md ">
                 <div className="">

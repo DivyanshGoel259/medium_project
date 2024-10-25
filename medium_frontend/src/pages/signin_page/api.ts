@@ -1,15 +1,20 @@
-import { post } from "../../lib/Network";
+import { baseUrl } from "../../env";
+import { post } from "../../lib/network";
 
-const baseUrl = "http://127.0.0.1:8787/api/v1";
 import { SigninType } from "./types";
 
 export const signinReq = async ({ email, password }: SigninType) => {
   try {
     const data = await post(`${baseUrl}/user/signin`, { email, password });
-    console.log({ data })
-    localStorage.setItem("token", data.token)
-    return [data, null];
+    if (data.Message) {
+      throw new Error(data.Message)
+    } else {
+      localStorage.setItem("token", data.token)
+      return [data, null] as [string, null]
+    }
+
   } catch (err) {
-    return [null, err];
+    return [null, err] as [null, Error]
   }
+
 };

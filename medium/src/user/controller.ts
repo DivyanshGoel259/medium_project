@@ -2,37 +2,27 @@ import { Context } from "hono";
 import * as service from "./service";
 
 export const Signup = async (c: Context) => {
-  const { name, email, password } = await c.req.json();
+  
 
   try {
-    const response = await service.Signup({ name, email, password });
-    if (response.status) {
-      return c.json(
-        {
-          response,
-        },
-        200
-      );
-    } else {
-      return c.json({ response });
-    }
-  } catch (err) {
-    console.error(err);
-    return c.json({ Message: "Signup Failed , Try Again later" });
+    const { name, email, password } = await c.req.json();
+    const response = await service.signup({ name, email, password });
+    return c.json({data:response},200)
+  } catch (err:any) {
+    const errorMessage = err.message || "An error occurred during signup";
+    return c.json({ error: {message:errorMessage} }, 400);
   }
 };
 
 export const Signin = async (c: Context) => {
-  const { email, password } = await c.req.json();
+  
 
   try {
-    const response = await service.Signin({ email, password });
-    if (response.status) {
-      return c.json({ response }, 200);
-    } else {
-      return c.json({ response }, 403);
-    }
-  } catch (err) {
-    return c.json({ Message: "Signin Failed , Try Again later" });
+    const { email, password } = await c.req.json();
+    const response = await service.signin({email, password });   
+    return c.json({data:response},200)
+  } catch (err:any) {
+    const errorMessage = err.message || "An error occurred during signin";
+    return c.json({ error: {message:errorMessage}}, 400);
   }
 };

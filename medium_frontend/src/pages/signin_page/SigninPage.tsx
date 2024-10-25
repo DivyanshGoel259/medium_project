@@ -6,12 +6,46 @@ import { SubHeading } from "../../components/SubHeadingCompo";
 import { Button } from "../../components/Button";
 import { SigninType } from "./types";
 import { signinReq } from "./api";
+import { useNavigate } from "react-router-dom";
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
+
 
 export const SigninPage = () => {
   const [postInputs, setPostInputs] = useState<SigninType>({
     email: "",
     password: "",
   });
+
+
+
+  const navigate = useNavigate()
+
+  const handleOnClick = async () => {
+    const respoonse = await signinReq(postInputs)
+    const [data, error] = respoonse
+    if (error) {
+      toast.error(error.message)
+    }
+    if (!data) return
+    if (data) {
+      toast.success("Signin Successfull", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      setTimeout(() => {
+        navigate("/blogs")
+      }, 3000);
+
+    }
+  }
   return (
     <div className="h-screen lg:grid lg:grid-cols-10 flex justify-center items-center flex-col ">
       <div className="lg:col-span-5 flex justify-center ">
@@ -54,9 +88,7 @@ export const SigninPage = () => {
           <div className="mt-4 ">
             <Button
               title="Sign Up"
-              onClick={() => {
-                signinReq(postInputs)
-              }}
+              onClick={handleOnClick}
             />
           </div>
         </div>
@@ -70,6 +102,7 @@ export const SigninPage = () => {
           authorAbout={"CEO, Acme inc"}
         />
       </div>
+      <ToastContainer />
     </div>
   );
-};
+}

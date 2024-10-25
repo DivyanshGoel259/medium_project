@@ -1,20 +1,13 @@
-import { post } from "../../lib/Network";
-
-const baseUrl = "http://127.0.0.1:8787/api/v1";
-
-export interface Author {
-    name: string
-}
+import { baseUrl } from "../../env";
+import { post } from "../../lib/network";
+import { Post as PostType } from "../../types";
 
 interface Post {
     title: string,
     content: string,
 }
 
-export interface BlogType {
-    message: string,
-    status: boolean
-}
+
 
 export const postBlog = async (postData: Post) => {
     try {
@@ -23,10 +16,11 @@ export const postBlog = async (postData: Post) => {
         const data = await post(`${baseUrl}/blogs`, postData, {
             headers: { Authorization: `Bearer ${token}` },
         });
-        return [data, null] as [BlogType, null]
+        
+        return [data, null] as [PostType, null]
+        
     } catch (err) {
         return [null, err] as [null, Error]
     }
 
 };
-

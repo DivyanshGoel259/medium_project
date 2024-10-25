@@ -6,13 +6,44 @@ import { SubHeading } from "../../components/SubHeadingCompo";
 import { Button } from "../../components/Button";
 import { SignupType } from "./types";
 import { signupReq } from "./api";
+import { useNavigate } from "react-router-dom";
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
+
+
 
 export const SignupPage = () => {
+  const navigate = useNavigate()
   const [postInputs, setPostInputs] = useState<SignupType>({
     name: "",
     email: "",
     password: "",
   });
+
+  const handleOnClick = async () => {
+    const response = await signupReq(postInputs)
+    const [data, error] = response
+    if (error) {
+      toast.error(error.message)
+    }
+    if (data) {
+      toast.success("Signup Successfull", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      setTimeout(() => {
+        navigate("/blogs")
+      }, 3000);
+    }
+
+  }
 
   return (
     <div className="h-screen lg:grid lg:grid-cols-10 flex justify-center items-center flex-col ">
@@ -68,9 +99,7 @@ export const SignupPage = () => {
           <div className="mt-4 ">
             <Button
               title="Sign Up"
-              onClick={() => {
-                signupReq(postInputs);
-              }}
+              onClick={handleOnClick}
             />
           </div>
         </div>
@@ -84,6 +113,7 @@ export const SignupPage = () => {
           authorAbout={"CEO, Acme inc"}
         />
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -9,10 +9,12 @@ interface RequestOptions {
 // Helper function to handle response
 const handleResponse = async (response: Response) => {
     if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
+        // throw new Error(`Error: ${response.status} ${response.statusText}`);
+        const ErrResponse = await response.json();
+        throw ErrResponse.error
     }
     const resp = await response.json();
-    return resp.response
+    return resp.data
 };
 
 // GET request

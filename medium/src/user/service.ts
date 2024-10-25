@@ -7,13 +7,8 @@ interface User {
   email: string;
   password: string;
 }
-interface response {
-  token?: string;
-  message: string;
-  status: boolean;
-}
 
-export const Signup = async ({ name, email, password }: User) => {
+export const signup = async ({ name, email, password }: User) => {
   try {
     const createdUser = await prisma.user.create({
       data: {
@@ -23,23 +18,19 @@ export const Signup = async ({ name, email, password }: User) => {
       },
     });
     const token = await sign({ id: createdUser.id }, JWT_SECRET);
-    let response: response = {
-      token: token,
-      message: "User Created Successfully",
-      status: true,
-    };
-    return response;
-  } catch (err) {
-    console.error(err);
-    let response: response = {
-      message: "Signup Failed , Try Again later",
-      status: false,
-    };
-    return response;
-  }
+    if(!token){
+      throw new Error("Failed to Generate Token")
+    }
+    return token 
+  } catch (err:any) {
+      if (err.code === 'P2002') {
+        throw new Error("Email is already in use");
+      }
+      throw err;
+    }
 };
 
-export const Signin = async ({
+export const signin = async ({
   email,
   password,
 }: Pick<User, "email" | "password">) => {
@@ -51,25 +42,15 @@ export const Signin = async ({
       },
     });
     if (!user) {
-      let response: response = {
-        message: "Enter Valid User Details",
-        status: false,
-      };
-      return response;
-    } else {
-      const token = await sign({ id: user.id }, JWT_SECRET);
-      let response: response = {
-        token,
-        message: "Login Successfully",
-        status: true,
-      };
-      return response;
+      throw new Error("Invalid Email or Password")
     }
-  } catch (err) {
-    let response: response = {
-      message: "Signin Failed",
-      status: false,
-    };
-    return response;
+    const token = await sign({ id: user.id }, JWT_SECRET);
+    return token;
+
+  } catch (err:any) {
+    if (err.code === 'P2001') {
+      throw new Error("No user with this email exists");
+    }
+    throw err
   }
 };

@@ -2,14 +2,11 @@ import { useState } from "react"
 import { AppBar } from "../../components/AppBar"
 import { TextArea } from "./components/TextArea"
 import { postBlog } from "./api"
-import { measureMemory } from "vm"
+import { Bounce, toast, ToastContainer } from "react-toastify"
 
 export const CreateBlog = () => {
-    const [post, setPost] = useState({
-        title: "",
-        content: ""
-    })
-    const [error, setError] = useState(null)
+    const [post, setPost] = useState<any>({})
+    const [error, setError] = useState<string|null>(null)
     const [message, setMessage] = useState("")
 
 
@@ -18,18 +15,30 @@ export const CreateBlog = () => {
         postBlog(post).then((response) => {
             
             const [data, err] = response
-            if (!data) return null
-            if (err) {
-                
-                setError(err)
+            if (err) {                
+                setError(err.message)
             }
-            setMessage(data.message)
-            console.log(message);
+            if (!data) return
+            if(data.post.id){
+                setMessage("Post created successfully")
+            }
         })
     }
 
     if (message == "Post created successfully") {
-        alert(message)
+        toast.success(message, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+    } else {
+        toast.error(message);
     }
 
 
@@ -57,6 +66,7 @@ export const CreateBlog = () => {
             </div>
             
         </div>
+        <ToastContainer/>
 
     </div>
 }
