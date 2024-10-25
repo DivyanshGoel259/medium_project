@@ -19,7 +19,7 @@ export const CreateBlog = () => {
                 setError(err.message)
             }
             if (!data) return
-            if(data.post.id){
+            if(data.id){
                 setMessage("Post created successfully")
             }
         })
